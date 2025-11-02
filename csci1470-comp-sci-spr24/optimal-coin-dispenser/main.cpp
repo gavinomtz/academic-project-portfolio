@@ -1,0 +1,99 @@
+/////////////////////////////////////////////////////////////////////
+//
+// Name: Gavino Martinez
+// Due date: 2/28/2024
+// Class: CSCI 1470.06
+// Semester: Spring 2024
+// CSCI 1470 Instructor: MR. DIETRICH
+//
+// Using your own words describe below what the program does 
+// Program Description:
+// This program calculates the optimal distribution of U.S. coins (quarters, dimes, nickels, and pennies) 
+// needed to make a given amount of change in cents. It uses a function to compute the quantity of each 
+// coin and the total number of coins, then displays the result in a clear format.
+//
+/////////////////////////////////////////////////////////////////////
+
+#include <typeinfo>				// to be able to use operator typeid
+#include <iostream>
+#include <iomanip>
+using namespace std;
+// Ignore this; it's a little function used for making tests
+inline void _test(const char* expression, const char* file, int line)
+{
+  cerr << "test(" << expression << ") failed in file " << file;
+  cerr << ", line " << line << "." << endl << endl;
+}
+// This goes along with the above function...don't worry about it
+#define test(EXPRESSION) ((EXPRESSION) ? (void)0 : _test(#EXPRESSION, __FILE__, __LINE__))
+
+// Insert here the prototypes of the functions
+
+void coinChanger(int cents, int& c25, int& c10, int& c05, int& c01, int & coincount);
+void printChange(int cents, int c25, int c10, int c05, int c01, int coincount);
+
+int main()
+{
+  // Declare variables amount (amount in cents), count25 (quantity of quarters), count10 (quantity of dimes),
+  // count5 (quantity of nickels), count1 (quantity of pennies), and count (quantity of coins) to hold whole values
+int amount, count25, count10, count5, count1, count;
+  // Prompt the user to "Enter amount in cents to be returned as change: "
+cout << "Enter amount in cents to be returned as change: ";
+  // Read the value from the keyboard and store it in the corresponding variable
+cin >> amount;
+  // Call coinChanger() to calculate the quantity of each type of coin and the total number of coins
+  // that are needed to provide a given change
+coinChanger(amount, count25, count10, count5, count1, count);
+  // Call function printChange() to print the amount of change, the quantity of each type of coin and the total number of coins
+printChange(amount, count25, count10, count5, count1, count);
+
+
+            // Do NOT remove or modify the following statements
+  cout << endl << "Testing your solution" << endl << endl;
+  //test(typeid(cents) == typeid(1));					// Incorrect data type used for cents
+  test(typeid(count25) == typeid(1));						// Incorrect data type used for count25
+  test(typeid(count10) == typeid(1));						// Incorrect data type used for count10
+  test(typeid(count5) == typeid(1));						// Incorrect data type used for count5
+  test(typeid(count1) == typeid(1));						// Incorrect data type used for count1
+  test(typeid(amount) == typeid(1));						// Incorrect data type used for amount
+  test(typeid(count) == typeid(1));						// Incorrect data type used for count
+  coinChanger(71, count25, count10, count5, count1, count);
+  test(count25 == 2 );										// Incorrect quantity of quarters
+  test(count10 == 2);										// Incorrect quantity of dimes
+  test(count5 == 0);										// Incorrect quantity of nickels
+  test(count1 == 1);										// Incorrect quantity of pennies
+  coinChanger(69, count25, count10, count5, count1, count);
+  test(count25 == 2);										// Incorrect quantity of quarters
+  test(count10 == 1);										// Incorrect quantity of dimes
+  test(count5 == 1);										// Incorrect quantity of nickels
+  test(count1 == 4);										// Incorrect quantity of pennies
+  coinChanger(14, count25, count10, count5, count1, count);
+  test(count25 == 0);										// Incorrect quantity of quarters
+  test(count10 == 1);										// Incorrect quantity of dimes
+  test(count5 == 0);										// Incorrect quantity of nickels
+  test(count1 == 4);										// Incorrect quantity of pennies
+
+  return 0;
+}
+
+//************************  Function definition  *************************
+// Read the handout carefully for detailed description of the functions that you have to implement
+
+
+// Calculate the quantity of each type of coin and the total number of coins that are needed to provide a given change
+// and return all these values along with the total number of coins that are needed for the change
+
+void coinChanger(int cents, int& c25, int& c10, int& c05, int& c01, int & coincount){
+  c25 = cents / 25;
+  c10 = (cents % 25) / 10;
+  c05 = ((cents % 25) % 10) / 5;
+  c01 = (((cents % 25) % 10) % 5) / 1;
+  coincount = c25 + c10 + c05 + c01;
+}
+
+// Print the amount of cents, the quantity of each type of coin and the total number of coins 
+// according to the format specifies on my handout
+
+void printChange(int cents, int c25, int c10, int c05, int c01, int coincount){
+  cout << "You need to use " << coincount << " coins for a change of " << cents << " cents:\n\n" << c25 << " Quarters\n" << c10 << " Dimes\n" << c05 << " Nickels\n" << c01 << " Pennies\n\n";
+}

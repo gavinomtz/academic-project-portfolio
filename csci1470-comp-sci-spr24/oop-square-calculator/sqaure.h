@@ -1,0 +1,81 @@
+#pragma once
+//******************************************************************************
+// CSCI 1470.06 Fall 2024 Homework # 4
+// Gavino Martinez
+// 
+// 
+// Using your own words, write here a description of what the program does.
+// Header file that declares the class square and the different functions that are used in the main program.
+//******************************************************************************
+
+// SPECIFICATION FILE FOR C++ CLASS Square
+// 
+// Include here the libraries that you need for the class
+#include <cmath>
+
+
+using namespace std;
+
+// ---------------class declaration---------------
+
+class square{
+public:
+    void setSide(double s); // Declaring void function setSide
+    double getSide(); // Declaring double function getSide
+    int area(); // Declaring int function area
+    int perimeter(); // Delcaring int function perimeter
+    double diagonals(); // Declaring double function diagonals
+    square(); // Declares default constructor
+    square(double s); // Declares parameterized constructor
+private:
+    double side; // Defining private member side
+};
+
+
+// ---------------class implementation---------------
+
+
+// member function that receives a whole number and assigns it to member side
+void square::setSide(double s)
+{
+  side = s;
+}
+
+// member function that returns the value of member side
+double square::getSide()
+{
+  return side;
+}
+
+// default constructor (initializes member side to zero)
+square::square()
+{
+  side = 0;
+}
+
+// parameterized constructor (initializes member side to the whole number received)
+square::square(double s)
+{
+  side = s;
+}
+
+// member function that returns the area of the square as a whole number
+int square::area()
+{
+  return side * side;
+}
+
+// member function that returns the perimeter of the square as a whole number
+int square::perimeter()
+{
+  return side + side + side + side;
+}
+
+// member function that returns the length of the diagonals of the square
+// as a double precision real number rounded to the first decimal digit
+double square::diagonals()
+{
+  int sidesquare = pow(side, 2); // 
+  int diagonal = (sidesquare + sidesquare); // 
+  return (round(sqrt(diagonal) * 10) / 10); // 
+}

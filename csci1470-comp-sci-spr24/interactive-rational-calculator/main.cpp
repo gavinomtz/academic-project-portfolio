@@ -1,0 +1,226 @@
+//******************************************************************************
+// CSCI 1470.06 Spring 2024
+// Gavino Martinez
+// 
+// Using your own words, write here a description of what the program does.
+// This program prompts the user to choose if they want to quitthe program, add, or subtract rational numbers. When they choose to add or subtract, the program will prompt the user to enter two rational numbers. The program will then add or subtract those fractions and output the result. Then it asks if they want to do another operation. If they choose to do another operation, the program will repeat the process. If they choose not to do another operation, the will be promted back to the main menu.
+//******************************************************************************
+
+
+
+
+
+
+#include <typeinfo>				// to be able to use operator typeid
+
+// Include the libraries and namespace statement that your program needs to compile here
+#include <iostream> // to be able to use cout
+
+using namespace std; // to not have to use std::
+// Include the function prototypes here. Define the functions below main()
+void pause();
+void clear_screen();
+void showMenu();
+void add();
+void subtract();
+void GetRational(int& num, int& den);
+void AddRational(int& anum, int& aden, int num1, int den1, int num2, int den2);
+void SubtractRational(int& anum, int& aden, int num1, int den1, int num2, int den2);
+void DisplayRational(int num, int den);
+void reduce(int& num, int& den);
+
+
+// Ignore this; it's a little function used for making tests
+inline void _test(const char* expression, const char* file, int line)
+{
+  cerr << "test(" << expression << ") failed in file " << file;
+  cerr << ", line " << line << "." << endl << endl;
+}
+// This goes along with the above function...don't worry about it
+#define test(EXPRESSION) ((EXPRESSION) ? (void)0 : _test(#EXPRESSION, __FILE__, __LINE__))
+
+int main()
+{
+// Start entering your code for main() here ----------------------------------------
+char choice; // variable to store the user's choice of a, s, or q
+do{
+showMenu(); // Display the menu
+cin >> choice; // Get the user's choice
+if(choice == 'a' || choice == 'A'){ // If they enter a or A, add two rational numbers
+  add();
+}
+  else if (choice == 's' || choice == 'S'){ // If they enter s or S, subtract two rational numbers
+    subtract();
+  }
+  else if (choice == 'q' || choice == 'Q'){ // If they enter q or Q, quit the program
+    return 0;
+  }
+}while(choice != 'q' || choice != 'Q'); // Repeat the loop until the user enters q or Q
+
+
+
+// Stop entering your code for main() here ----------------------------------------
+
+  cout << endl;
+
+  // Do NOT remove or modify the following statements
+  cout << endl << "Testing your solution" << endl << endl;
+  int num, den;
+  num = 4; den = 3;
+  reduce(num, den);
+  test(num == 4 && den == 3);								// Incorrect reducing of the fraction
+  num = 12; den = 3;
+  reduce(num, den);
+  test(num == 4 && den == 1);								// Incorrect reducing of the fraction
+  num = 3; den = 12;
+  reduce(num, den);
+  test(num == 1 && den == 4);								// Incorrect reducing of the fraction
+  num = -3; den = 12;
+  reduce(num, den);
+  test(num == -1 && den == 4);							// Incorrect reducing of the fraction
+  num = -63; den = 15;
+  reduce(num, den);
+  test(num == -21 && den == 5);							// Incorrect reducing of the fraction
+  num = -1024; den = 127;
+  reduce(num, den);
+  test(num == -1024 && den == 127);						// Incorrect reducing of the fraction
+
+  AddRational(num, den, 1, 2, 2, 4);
+  test(num == 1 && den == 1);								// Incorrect addition of the fractions
+  AddRational(num, den, 1, 3, 3, 4);
+  test(num == 13 && den == 12);							// Incorrect addition of the fractions
+  AddRational(num, den, 9, 5, 2, 5);
+  test(num == 11 && den == 5);							// Incorrect addition of the fractions
+  AddRational(num, den, 1, 3, 3, 18);
+  test(num == 1 && den == 2);								// Incorrect addition of the fractions
+  AddRational(num, den, 1, 7, 3, 9);
+  test(num == 10 && den == 21);							// Incorrect addition of the fractions
+  AddRational(num, den, 3, 7, 6, 9);
+  test(num == 23 && den == 21);							// Incorrect addition of the fractions
+
+  SubtractRational(num, den, 1, 2, 2, 4);
+  test(num == 0 && den == 1);								// Incorrect subtraction of the fractions
+  SubtractRational(num, den, 1, 3, 3, 4);
+  test(num == -5 && den == 12);							// Incorrect subtraction of the fractions
+  SubtractRational(num, den, 9, 5, 2, 5);
+  test(num == 7 && den == 5);								// Incorrect subtraction of the fractions
+  SubtractRational(num, den, 1, 3, 3, 18);
+  test(num == 1 && den == 6);								// Incorrect subtraction of the fractions
+  SubtractRational(num, den, 1, 1, 75, 12);
+  test(num == -21 && den == 4);							// Incorrect subtraction of the fractions
+  SubtractRational(num, den, 6, 9, 3, 7);
+  test(num == 5 && den == 21);							// Incorrect subtraction of the fractions
+
+  cout << "Done!" << endl;
+  return 0;
+}
+
+// Define your functions below this line please
+//---------------------------------------------
+
+void pause()	// This function pauses the execution of the program
+{
+  cout << "Press Enter to continue ...";
+  cin.sync();
+  cin.ignore();
+  cin.get();
+}
+
+void clear_screen()	// This function clears the screen
+{
+  cout << "\033[0;0H\033[2J";
+}
+
+void showMenu() // This function shows the title and gives options to the user
+{
+  clear_screen();
+  cout << "Rational numbers calculator\n\n" << "(A)ddition\n" << "(S)ubtraction\n" << "(Q)uit\n\n" << "Enter your option: ";
+  
+}
+
+void add() // Function that adds two rational numbers
+{
+  int num1, den1, num2, den2, anum, aden; // Creates variables to store the numerator and denominator of the two rational numbers
+  char choice; // Variable to store the user's choice of a, s, or q
+  do{
+  clear_screen(); // Clear the screen for every loop
+  cout << "Addition of rational numbers\n\n"; // Prompt the user with the title
+  GetRational(num1, den1); // Gets the first set of fractions
+  GetRational(num2, den2); // Gets the second set of fractions
+  AddRational(anum, aden, num1, den1, num2, den2); // Calls AddRational function to add the two fractions
+  cout << "\nThe result of "; DisplayRational(num1, den1); cout << " + ";     
+  DisplayRational(num2, den2); cout << " = "; DisplayRational(anum, aden); cout << endl << 
+  endl << "Do you want to do more additions? (Y/N): "; // Displays the result of the addition and asks the user if they want to do more additions
+  cin >> choice; // Store the user's choice in choice
+    } while(choice == 'y' || choice == 'Y'); // If the user inputs y or Y, the loop will continue
+}
+
+void subtract() // Function that subtracts two rational numbers
+{
+  int num1, den1, num2, den2, anum, aden; // Creates variables to store the numerator and denominator of the first fraction, second fraction, and the answer
+  char choice; // Creates a variable to store the user's choice to continue or not
+  do{
+  clear_screen(); // Clear the screen for every loop
+  cout << "Subtraction of rational numbers\n\n"; // Prompt the user with the title
+  GetRational(num1, den1); // Gets the first set of fractions
+  GetRational(num2, den2); // Gets the second set of fractions
+  SubtractRational(anum, aden, num1, den1, num2, den2); // Calls SubtractRational to subtract the two fractions
+  cout << "\nThe result of "; DisplayRational(num1, den1); cout << " - ";     
+  DisplayRational(num2, den2); cout << " = "; DisplayRational(anum, aden); cout << endl << 
+  endl << "Do you want to do more additions? (Y/N): "; // Displays the result of the subtraction and asks the user if they want to do more subtractions
+  cin >> choice; // Store the user's choice in choice
+    } while(choice == 'y' || choice == 'Y'); // If the user inputs y or Y, the loop will continue
+}
+
+void GetRational(int& num, int& den) // This function gets the numerator and denominator
+{
+  do{
+  cout << "\nPlease enter a fraction (n/d): "; //Promts the user to enter a fraction
+  cin >> num; // Gets the numerator entered and stores it in num
+  cin.ignore(); // Ignores the / entered by the user
+  cin >> den; // Gets the denominator entered and stores it in den
+    if (den == 0){ // If the denominator is 0, it will display the following message
+      cout << "\nYou cannot divide by zero, please enter a new fraction\n";
+    }
+  } while (den == 0); // If the user enters 0 for the denominator, it will prompt them to enter a different fraction
+
+}
+
+void AddRational(int& anum, int& aden, int num1, int den1, int num2, int den2) // Function that calcualtes the sum of two fractions
+{
+  anum = (num1 * den2) + (num2 * den1); // Calculates the numerator
+  aden = (den1 * den2); // Calculates the denominator
+  reduce(anum, aden); // Reduces the fraction
+  
+}
+
+void SubtractRational(int& anum, int& aden, int num1, int den1, int num2, int den2) // Function that calculates the difference of two fractions
+{
+  anum = (num1 * den2) - (num2 * den1);  // Calculates the numerator
+  aden = (den1 * den2); // Caclulates the denominator
+  reduce(anum, aden); // Reduces the fraction
+}
+
+void DisplayRational(int num, int den) // Displays the fractions in the correct format
+{
+  if (den == 1){ // If the denominator is 1 it only displays the numerator
+    cout << num;
+  }
+  else{ // If the denominator is not 1, it displays the fraction in the correct format
+  cout << num << '/' << den;
+  }
+}
+
+void reduce(int& num, int& den) // This function reduces the fraction
+{
+ int A, B, R; // Declare variables A, B, and R
+  A = abs(num); // Get the absolute value of num and store it in A
+  B = abs(den); // Get the abosolute value of den and store it in B
+  R = A % B; // Get the remainder of A and B and store it in R
+  while (R != 0) // While R is not 0, it will continue to loop
+    A = B;
+    B = R;
+    R = A % B;
+  num /= B; // Divide num by B
+  den /= B; // Divide den by B
+}
