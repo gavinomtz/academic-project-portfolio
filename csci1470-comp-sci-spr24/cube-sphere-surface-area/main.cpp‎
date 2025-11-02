@@ -1,0 +1,100 @@
+/////////////////////////////////////////////////////////////////////
+//
+// Name: Gavino Martinez
+// Due date: 2/21/2024
+// Class: CSCI 1470.06
+// Semester: Spring 2024
+// CSCI 1470 Instructor: Gustavo Dietrich
+//
+// Using your own words describe below what the program does 
+// Program Description: Program which calculates the surface area of a cube and sphere when
+// user inputs the side of the cube and the radius of the sphere.
+//
+/////////////////////////////////////////////////////////////////////
+
+// Libraries that your program needs to compile
+
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+using namespace std;
+
+// Prototypes of the functions
+
+double square(double x);
+double cube_surf(double sideCube);
+double sphere_surf(double radiusSphere);
+double round_off(double value, int digits);
+
+// Declare a global constant variable named PI above main() that holds value 3.141592
+const double PI = 3.141592;
+
+int main()
+{
+// Declare variables named side, radius, s_cube, and s_sphere that hold double precision real numbers
+double side, radius, s_cube, s_sphere;
+  
+// Prompt the user to "Enter side of cube : "
+cout << "Enter side of cube: ";
+  
+// Read from keyboard the value entered by the user and assign it to side
+cin >> side;
+  
+// Prompt the user to "Enter radius of sphere : "
+cout << "Enter radius of sphere: ";
+  
+// Read from keyboard the value entered by the user and assign it to radius
+cin >> radius;
+  
+// Call cube_surf() to calculate the surface of the cube and assign the result to s_cube
+s_cube = cube_surf(side);
+  
+// Call sphere_surf() to calculate the surface of the sphere and assign the result to s_sphere
+s_sphere = sphere_surf(radius);
+  
+// Format the output to display the numbers in fixed format with two decimal digits
+cout << fixed << setprecision(2);
+  
+// Display on the screen the message
+//	   "The surface area of a cube of sides ", side,   " is ", s_cube
+//	"The surface area of a sphere of radius ", radius, " is ", s_sphere
+// Use 39 columns for text and 6 columns for the values.
+cout << endl << setw(39) << "The surface area of a cube of sides" << setw(6) << side << " is " << s_cube;
+
+cout << setw(39) << "\n\nThe surface area of a sphere of radius" << setw(6) << radius << " is " << s_sphere << endl << endl;
+
+
+  return 0;
+}
+
+
+
+//************************  Function definition  *************************
+
+// Calculate the square of the value received
+double square(double x)
+{
+    return x*x;
+}
+
+
+// Calculate the surface area of the cube using the formula 6 x side^2 (six times the square of the side of the cube)
+double cube_surf(double sideCube)
+{ 
+  sideCube = 6 * square(sideCube);
+  return round_off(sideCube, 2);
+}
+
+
+// Calculate the surface area of the sphere using the formula 4 x Pi x radius^2 (four times Pi times the square of the radius of the sphere)
+double sphere_surf(double radiusSphere)
+{
+  radiusSphere = 4 * PI * square(radiusSphere);
+  return round_off(radiusSphere, 2);
+}
+
+// Rounds the value received in the first parameter to the number of digits received in the second parameter
+double round_off(double value, int digits)
+{
+  return round(value * pow(10., digits)) / pow(10., digits);
+}
