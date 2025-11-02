@@ -1,0 +1,142 @@
+/////////////////////////////////////////////////////////////////////
+//
+// Name: Gavino Martinez
+// Date: 4/25/2024
+// Class: CSCI 1470.06
+// Semester: Spring 2024
+// CSCI 1470 Instructor: Mr. Dietrich
+//
+// Program Description: Program that generates a checkerboard of letters 
+// based on a user-specified size, displays it, and also prints a rotated version of the board.
+// Users can repeatedly enter board sizes and view different configurations.
+//
+/////////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+// Declare constant DIM = 7
+
+const int DIM = 7;
+
+// Inserte prototypes here
+
+void createBoard( char grid[][DIM], int maxSize );
+void printBoard(const char grid[][DIM], int maxSize );
+void printBoard2(const char grid[][DIM], int maxSize );
+
+
+
+int main()
+{
+  // Declare a two-dimensional array (using the constant) to hold single characters
+    char grid [DIM] [DIM];
+  // Declare variable bsize to hold a whole number
+    int bsize;
+  // Declare variable answer to hold a character
+    char answer;
+  // Use a do-loop to allow the user to try again
+    do{
+    // Prompt the user "Please enter the size of the board [1-7]: "
+        cout << "Please enter the size of the board [1-7]: ";
+    // Get the size and store it in bsize
+        cin >> bsize;
+    // Check the input stream. If it is invalid, display error message "Invalid entry" and jump out of the loop
+        if (!cin){
+            cout << "Invalid entry\n";
+            break;
+        }
+    // Check if bsize is within the range. If it is, call the functions
+        if (bsize >= 1 && bsize <= 7){
+      // Call the function to create the checkerboard
+            createBoard(grid, bsize);
+      // Call the function to print the checkerboard
+            printBoard(grid, bsize);
+      // Call the function to print the rotated checkerboard
+            printBoard2(grid, bsize);
+    // Otherwise, display error message "Invalid size"
+
+        } else{
+
+            cout << "Invalid size\n\n";
+        }
+
+    // Prompt the user "Do you want to try again [y-n]?: "
+        cout << "Do you want to try again [y-n]?: ";
+    // Get the answer and store in answer
+        cin >> answer;
+        cout << '\n';
+    // As long as the answer is 'y' (in upper or lower case), keep looping
+    } while (answer == 'y' || answer == 'Y');
+
+  return 0;
+}
+
+
+// Function definitions
+
+// createBoard(): Receives the two-dimensional array and the size of the board (quantity of rows and columns)
+// Using nested loops creates the board according to specifications: starting with 'A' inserts
+// the letters in the array separated by a blank box
+void createBoard( char grid[][DIM], int maxSize )
+{
+    int row, col;
+    char x = 65;
+    for (row = 0; row < maxSize; ++row)
+      {
+        for (col = 0; col < maxSize; ++col)
+          {
+          if ((row + col) % 2 == 0)
+          {
+           grid[row][col] = x++;
+          }
+            else
+            {
+              grid[row][col] = ' ';
+            }
+      }
+      }
+}
+
+
+
+
+
+
+// printBoard1(): Receives the two-dimensional array and the size of the board (quantity of rows and columns)
+// Using nested loops prints the board
+void printBoard(const char grid[][DIM], int maxSize )
+{
+  cout << endl;
+    int row, col;
+    for (row = 0; row < maxSize; ++row)
+    {
+        for (col = 0; col < maxSize; ++col)
+        {
+            cout << grid[row][col];
+        }
+        cout << endl;
+    }
+  cout << endl;
+}
+
+
+
+
+// printBoard2(): Receives the two-dimensional array and the size of the board (quantity of rows and columns)
+// Using nested loops prints the board rotated
+void printBoard2(const char grid[][DIM], int maxSize )
+{
+    int row, col;
+    for (row = 0; row < maxSize; ++row)
+    {
+        for (col = 0; col < maxSize; ++col)
+        {
+            cout << grid[col][row];
+        }
+        cout << endl;
+    }
+    cout << endl;
+
+}
